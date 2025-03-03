@@ -1,3 +1,5 @@
+#Overview
+
 The Bing Rewards Automation Bot is a powerful and user-friendly tool designed to automate Bing search activities and maximize your Microsoft Rewards points. This bot leverages keyboard input simulation to mimic human-like typing behavior, ensuring natural interactions that reduce the risk of detection or account restrictions.
 
 Key Features:
@@ -22,7 +24,8 @@ Cross-Platform Compatibility :
 Developed using Python libraries like pyautogui, nltk, and customtkinter, ensuring compatibility across Windows systems.
 Can be packaged into a standalone executable for easy distribution and use.
 
-How It Works:
+#How It Works
+
 Main Account Mode :
 Perform random searches directly on your primary account without needing to store its credentials in the JSON file.
 Ideal for users who prefer to keep their main account separate while automating secondary accounts.
@@ -40,3 +43,5 @@ System Requirements :
 Operating System: Windows
 Dependencies: Python libraries (pyautogui, nltk, customtkinter)
 Browser: Microsoft Edge (required for optimal performance)
+
+#The bot is for educational purposes only, its use could lead to the banning of the account, the creator assumes no responsibility for its use.
