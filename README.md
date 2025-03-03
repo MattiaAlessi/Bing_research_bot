@@ -44,4 +44,4 @@ Operating System: Windows
 Dependencies: Python libraries (pyautogui, nltk, customtkinter)
 Browser: Microsoft Edge (required for optimal performance)
 
-#The bot is for educational purposes only, its use could lead to the banning of the account, the creator assumes no responsibility for its use.
+# The bot is for educational purposes only, its use could lead to the banning of the account, the creator assumes no responsibility for its use.
