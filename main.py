@@ -75,7 +75,8 @@ def perform_login(email, password):
         log_text.insert(tk.END, f"Error during login for account {email}: {e}\n")
         return False
 
-# Funzione per eseguire le ricerche casuali per l'account principale
+
+# Funzione per eseguire le ricerche casuali per l'account principale con errori di scrittura
 def perform_random_searches_main_account():
     global execution_active
     execution_active = True
@@ -88,8 +89,38 @@ def perform_random_searches_main_account():
 
             def generate_random_words(num_words):
                 dictionary = words.words()
-                random_words = random.sample(dictionary, num_words * 3)  # Genera tre volte le parole necessarie
-                return [" ".join(pairs[:3]) for pairs in zip(random_words[::3], random_words[1::3], random_words[2::3])]  # Combina a gruppi di 3
+                random_words = random.sample(dictionary, num_words * 3)  # Generates three times the necessary words
+                return [" ".join(pairs[:3]) for pairs in zip(random_words[::3], random_words[1::3], random_words[2::3])]  # Combines in groups of 3
+
+            def introduce_typo(word):
+                """ Introduce a random typo into a word """
+                if len(word) <= 2:
+                    return word
+
+                typo_type = random.choice(["swap", "delete", "replace"])
+                index = random.randint(0, len(word) - 2)
+
+                if typo_type == "swap":
+                    word_list = list(word)
+                    word_list[index], word_list[index + 1] = word_list[index + 1], word_list[index]
+                    return "".join(word_list)
+                elif typo_type == "delete":
+                    return word[:index] + word[index + 1:]
+                elif typo_type == "replace":
+                    replacement = random.choice("abcdefghijklmnopqrstuvwxyz")
+                    return word[:index] + replacement + word[index + 1:]
+
+            def generate_queries_with_typos(queries):
+                """ Introduce random typos into 2 or 3 words per sentence """
+                modified_queries = []
+                for query in queries:
+                    words_in_query = query.split()
+                    typo_count = random.randint(2, 3)
+                    typo_indices = random.sample(range(len(words_in_query)), typo_count)
+                    for i in typo_indices:
+                        words_in_query[i] = introduce_typo(words_in_query[i])
+                    modified_queries.append(" ".join(words_in_query))
+                return modified_queries
 
             try:
                 num_searches = int(searches_entry.get())
@@ -101,30 +132,34 @@ def perform_random_searches_main_account():
                 return
 
             random_queries = generate_random_words(num_searches)
+            random_queries_with_typos = generate_queries_with_typos(random_queries)
 
             pyautogui.hotkey('win', 'r')
-            sleep_random(1, 2)
+            sleep_random(1, 2)  # Usa la funzione globale sleep_random
             pyautogui.write('msedge')
             pyautogui.press('enter')
-            sleep_random(3, 5)
+            sleep_random(3, 5)  # Usa la funzione globale sleep_random
 
-            for i in range(num_searches):
+            for i, query in enumerate(random_queries_with_typos):
                 if not execution_active:
                     break
                 log_text.insert(tk.END, f"Search number: {i+1} for the main account\n")
 
                 pyautogui.hotkey('ctrl', 't')
-                sleep_random(1, 2)
+                sleep_random(1, 2)  # Usa la funzione globale sleep_random
 
-                search_query = random_queries[i]
-                pyautogui.write(search_query, interval=random.uniform(0.1, 0.2))  # Simula digitazione umana
+                for word in query.split():
+                    pyautogui.write(word, interval=random.uniform(0.1, 0.2))
+                    pyautogui.press('space')
+                    sleep_random(0.3, 0.6)  # Usa la funzione globale sleep_random
+
                 pyautogui.press('enter')
-                sleep_random(3, 5)
-
+                sleep_random(3, 5)  # Usa la funzione globale sleep_random
                 pyautogui.hotkey("ctrl", "w")
-                sleep_random(1, 2)
+                sleep_random(1, 2)  # Usa la funzione globale sleep_random
 
             log_text.insert(tk.END, "Random searches completed for the main account.\n")
+            pyautogui.hotkey('alt', 'f4')
 
         except Exception as e:
             log_text.insert(tk.END, f"Error during random searches: {e}\n")
@@ -133,7 +168,7 @@ def perform_random_searches_main_account():
             interrupt_button.configure(state=tk.DISABLED)
 
     threading.Thread(target=operations).start()
-
+              
 # Funzione per eseguire le ricerche casuali su più account
 def perform_random_searches_multiple_accounts():
     global execution_active
@@ -187,6 +222,36 @@ def execute_random_searches_for_account(account):
                 random_words = random.sample(dictionary, num_words * 3)
                 return [" ".join(pairs[:3]) for pairs in zip(random_words[::3], random_words[1::3], random_words[2::3])]
 
+            def introduce_typo(word):
+                """ Introduce a random typo into a word """
+                if len(word) <= 2:
+                    return word
+
+                typo_type = random.choice(["swap", "delete", "replace"])
+                index = random.randint(0, len(word) - 2)
+
+                if typo_type == "swap":
+                    word_list = list(word)
+                    word_list[index], word_list[index + 1] = word_list[index + 1], word_list[index]
+                    return "".join(word_list)
+                elif typo_type == "delete":
+                    return word[:index] + word[index + 1:]
+                elif typo_type == "replace":
+                    replacement = random.choice("abcdefghijklmnopqrstuvwxyz")
+                    return word[:index] + replacement + word[index + 1:]
+
+            def generate_queries_with_typos(queries):
+                """ Introduce random typos into 2 or 3 words per sentence """
+                modified_queries = []
+                for query in queries:
+                    words_in_query = query.split()
+                    typo_count = random.randint(2, 3)
+                    typo_indices = random.sample(range(len(words_in_query)), typo_count)
+                    for i in typo_indices:
+                        words_in_query[i] = introduce_typo(words_in_query[i])
+                    modified_queries.append(" ".join(words_in_query))
+                return modified_queries
+
             try:
                 num_searches = int(searches_entry.get())
                 if num_searches <= 0:
@@ -197,8 +262,9 @@ def execute_random_searches_for_account(account):
                 return
 
             random_queries = generate_random_words(num_searches)
+            random_queries_with_typos = generate_queries_with_typos(random_queries)
 
-            for i in range(num_searches):
+            for i, query in enumerate(random_queries_with_typos):
                 if not execution_active:
                     break
                 log_text.insert(tk.END, f"Search number: {i+1} for account {email}\n")
@@ -206,11 +272,13 @@ def execute_random_searches_for_account(account):
                 pyautogui.hotkey('ctrl', 't')
                 sleep_random(1, 2)
 
-                search_query = random_queries[i]
-                pyautogui.write(search_query, interval=random.uniform(0.1, 0.2))
+                for word in query.split():
+                    pyautogui.write(word, interval=random.uniform(0.1, 0.2))
+                    pyautogui.press('space')
+                    sleep_random(0.3, 0.6)
+
                 pyautogui.press('enter')
                 sleep_random(3, 5)
-
                 pyautogui.hotkey("ctrl", "w")
                 sleep_random(1, 2)
 
@@ -220,7 +288,6 @@ def execute_random_searches_for_account(account):
             log_text.insert(tk.END, f"Error during searches for account {email}: {e}\n")
 
     threading.Thread(target=operations).start()
-
 # Funzione per interrompere l'esecuzione
 def stop_execution():
     global execution_active
